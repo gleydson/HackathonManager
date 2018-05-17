@@ -1,13 +1,10 @@
 package com.greenmile.challenger.bean;
 
-import java.util.List;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import lombok.EqualsAndHashCode;
@@ -16,17 +13,26 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity @EqualsAndHashCode @ToString
-public class Team {
+public class Member {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	@Getter @Setter
 	private Long id;
 	
-	@Getter @Setter
-	@NotNull @Column(unique = true)
+	@Getter @Setter @NotNull
 	private String name;
 	
-	@Getter @Setter	@OneToMany
-	private List<Member> member;
-
+	@Getter @Setter @NotNull
+	private String email;
+	
+	@Getter @Setter @NotNull
+	private String phone;
+	
+	@Getter @Setter @NotNull
+	private String shirtSize;
+	
+	@Getter @Setter
+	@NotNull @ManyToOne
+	private Team team;
+	
 }

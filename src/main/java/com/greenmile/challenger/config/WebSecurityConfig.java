@@ -9,12 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.greenmile.challenger.config.jwt.AuthenticationFilterConfigJwt;
 import com.greenmile.challenger.config.jwt.LoginFilterConfigJwt;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -45,7 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.inMemoryAuthentication().withUser("user").password("123").roles("ADMIN");
+		auth
+			.inMemoryAuthentication()
+				.passwordEncoder(NoOpPasswordEncoder.getInstance())
+					.withUser("user")
+					.password("123")
+					.roles("ADMIN");
 		auth.userDetailsService(userDetailsService);		
 	}
 	

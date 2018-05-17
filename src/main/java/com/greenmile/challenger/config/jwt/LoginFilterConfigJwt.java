@@ -33,11 +33,11 @@ public class LoginFilterConfigJwt extends AbstractAuthenticationProcessingFilter
 				.readValue(request.getInputStream(), Organizer.class);
 		
 		return getAuthenticationManager().authenticate (
-				new UsernamePasswordAuthenticationToken (
-						credentials.getUsername(), 
-						credentials.getPassword(), 
-						Collections.emptyList()
-				)
+			new UsernamePasswordAuthenticationToken (
+					credentials.getUsername(), 
+					credentials.getPassword(), 
+					Collections.emptyList()
+			)
 		);
 	}
 	
