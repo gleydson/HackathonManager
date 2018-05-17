@@ -23,17 +23,16 @@ public class Organizer implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	@Getter @Setter
-	private Long id;
+	private @Getter @Setter Long id;
 	
-	@Getter @Setter @NotNull
-	private String name;
+	@NotNull
+	private @Getter @Setter String name;
 
-	@Setter @Column(unique = true)
-	private String username;
+	@Column(unique = true)
+	private @Setter String username;
 	
-	@Setter @NotNull 
-	private String password;
+	@NotNull 
+	private @Setter String password;
 	
 	public String getUsername() {
 		return this.username;

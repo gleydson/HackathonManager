@@ -4,10 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 
 public interface TeamService {
 
-	ResponseEntity<Page<Team>> getListAllTeams(Pageable pageable);
+	ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable);
 
 }

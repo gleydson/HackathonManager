@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.greenmile.challenger.bean.Hackathon;
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 
 public interface HackathonService {
 
 	ResponseEntity<Hackathon> createEvent(Hackathon event);
-	ResponseEntity<List<Team>> getListByName(String name);
-	ResponseEntity<List<Team>> getListByRegistrationDate(Date date);
+	ResponseEntity<List<MemberTest>> getListByName(String name);
+	ResponseEntity<List<MemberTest>> getListByRegistrationDate(Date date);
 	ResponseEntity<Boolean> endEvent();
 
 }

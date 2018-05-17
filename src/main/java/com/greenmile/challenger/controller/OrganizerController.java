@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 import com.greenmile.challenger.service.OrganizerService;
 
 @RestController
@@ -19,7 +19,7 @@ public class OrganizerController {
 	private OrganizerService service;
 	
 	@GetMapping("/getListAllTeams")
-	public ResponseEntity<Page<Team>> getListAllTeams(Pageable pageable) {
+	public ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable) {
 		return this.service.getListAllTeams(pageable);
 	}
 }

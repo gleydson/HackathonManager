@@ -30,13 +30,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		String login = "/login";
 		String index = "/";
+		String organizer = "/organizer/**/*";
+		String member = "/member";
 		
 		http.csrf().disable();
 		
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, login).permitAll()
 			.antMatchers(HttpMethod.GET, index).permitAll()
-			.anyRequest().authenticated();
+			.antMatchers(organizer).access("hasRole('ROLE_ADMIN')")
+			.antMatchers(member).access("hasRole('ROLE_USER')");
+			//.anyRequest().authenticated();
 			
 		http.addFilterBefore(new LoginFilterConfigJwt(login,
 			authenticationManager()), UsernamePasswordAuthenticationFilter.class);
@@ -50,9 +54,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth
 			.inMemoryAuthentication()
 				.passwordEncoder(NoOpPasswordEncoder.getInstance())
+					.withUser("admin")
+					.password("123")
+					.authorities("ROLE_ADMIN");
+		auth
+			.inMemoryAuthentication()
+				.passwordEncoder(NoOpPasswordEncoder.getInstance())
 					.withUser("user")
 					.password("123")
-					.roles("ADMIN");
+					.authorities("ROLE_USER");
 		auth.userDetailsService(userDetailsService);		
 	}
 	

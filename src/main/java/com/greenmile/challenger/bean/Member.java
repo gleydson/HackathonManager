@@ -16,23 +16,69 @@ import lombok.ToString;
 public class Member {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	@Getter @Setter
-	private Long id;
+	private @Getter @Setter Long id;
 	
-	@Getter @Setter @NotNull
-	private String name;
+	@NotNull
+	private @Getter @Setter String name;
 	
-	@Getter @Setter @NotNull
-	private String email;
+	@NotNull
+	private @Getter @Setter String email;
 	
-	@Getter @Setter @NotNull
-	private String phone;
+	@NotNull
+	private @Getter @Setter String phone;
 	
-	@Getter @Setter @NotNull
-	private String shirtSize;
+	@NotNull
+	private @Getter @Setter String shirtSize;
 	
-	@Getter @Setter
 	@NotNull @ManyToOne
-	private Team team;
+	private @Getter @Setter Team team;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getShirtSize() {
+		return shirtSize;
+	}
+
+	public void setShirtSize(String shirtSize) {
+		this.shirtSize = shirtSize;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
 	
 }

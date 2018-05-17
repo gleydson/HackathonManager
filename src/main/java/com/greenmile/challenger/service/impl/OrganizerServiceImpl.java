@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Hackathon;
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 import com.greenmile.challenger.service.HackathonService;
 import com.greenmile.challenger.service.OrganizerService;
 import com.greenmile.challenger.service.TeamService;
@@ -30,17 +30,17 @@ public class OrganizerServiceImpl implements OrganizerService {
 	}
 
 	@Override
-	public ResponseEntity<Page<Team>> getListAllTeams(Pageable pageable) {
+	public ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable) {
 		return this.teamService.getListAllTeams(pageable);
 	}
 
 	@Override
-	public ResponseEntity<List<Team>> getListByName(String name) {
+	public ResponseEntity<List<MemberTest>> getListByName(String name) {
 		return this.eventService.getListByName(name);
 	}
 
 	@Override
-	public ResponseEntity<List<Team>> getListByRegistrationDate(Date date) {
+	public ResponseEntity<List<MemberTest>> getListByRegistrationDate(Date date) {
 		return this.eventService.getListByRegistrationDate(date);
 	}
 

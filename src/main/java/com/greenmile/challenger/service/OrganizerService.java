@@ -8,14 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import com.greenmile.challenger.bean.Hackathon;
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 
 public interface OrganizerService {
 
 	public ResponseEntity<Hackathon> createEvent(Hackathon event);
-	public ResponseEntity<Page<Team>> getListAllTeams(Pageable pageable);
-	public ResponseEntity<List<Team>> getListByName(String name);
-	public ResponseEntity<List<Team>> getListByRegistrationDate(Date date);
+	public ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable);
+	public ResponseEntity<List<MemberTest>> getListByName(String name);
+	public ResponseEntity<List<MemberTest>> getListByRegistrationDate(Date date);
 	public ResponseEntity<Boolean> endEvent();
 	
 }

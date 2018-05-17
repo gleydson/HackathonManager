@@ -19,14 +19,12 @@ import lombok.ToString;
 public class Team {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	@Getter @Setter
-	private Long id;
+	private @Getter @Setter Long id;
 	
-	@Getter @Setter
 	@NotNull @Column(unique = true)
-	private String name;
+	private @Getter @Setter String name;
 	
-	@Getter @Setter	@OneToMany
-	private List<Member> member;
+	@OneToMany
+	private @Getter @Setter List<Member> member;
 
 }

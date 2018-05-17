@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Hackathon;
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 import com.greenmile.challenger.service.HackathonService;
 
 @Service
@@ -19,13 +19,13 @@ public class HackathonServiceImpl implements HackathonService {
 	}
 
 	@Override
-	public ResponseEntity<List<Team>> getListByName(String name) {
+	public ResponseEntity<List<MemberTest>> getListByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<List<Team>> getListByRegistrationDate(Date date) {
+	public ResponseEntity<List<MemberTest>> getListByRegistrationDate(Date date) {
 		// TODO Auto-generated method stub
 		return null;
 	}

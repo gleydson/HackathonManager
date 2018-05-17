@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.MemberTest;
 import com.greenmile.challenger.repository.TeamRepository;
 import com.greenmile.challenger.service.TeamService;
 
@@ -18,8 +18,8 @@ public class TeamServiceImpl implements TeamService {
 	private TeamRepository repository;
 	
 	@Override
-	public ResponseEntity<Page<Team>> getListAllTeams(Pageable pageable) {
-		return new ResponseEntity<Page<Team>>(this.repository.findAll(pageable), HttpStatus.OK);
+	public ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable) {
+		return new ResponseEntity<Page<MemberTest>>(this.repository.findAll(pageable), HttpStatus.OK);
 	}
 
 }
