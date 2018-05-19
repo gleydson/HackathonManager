@@ -32,13 +32,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public ResponseEntity<Team> subscribe(Team team) {
 		Hackathon hackathon = this.hackathonRepository.findById(team.getHackathon().getId()).get();
-		
-		Set<Member> allMembers = new HashSet<Member>();
-		
-		for (Team t : hackathon.getTeams() ) {
-			allMembers.addAll(t.getMembers());
-		}
-		
+		Set<Member> allMembers = new HashSet<Member>(hackathon.getMembers());
 		for (Member m : team.getMembers()) {
 			if (allMembers.contains(m)) {				
 				throw new ConflictException("This member is already participating in this hackathon in another team");
@@ -46,7 +40,6 @@ public class TeamServiceImpl implements TeamService {
 		}
 		
 		Set<Member> membersThisTeam = new HashSet<Member>(team.getMembers());
-		
 		if (membersThisTeam.size() != team.getMembers().size()) {
 			throw new ConflictException("There can be no duplicate members");
 		}

@@ -11,6 +11,7 @@ import com.greenmile.challenger.bean.Hackathon;
 import com.greenmile.challenger.bean.Team;
 import com.greenmile.challenger.exception.ResourceNotFoundException;
 import com.greenmile.challenger.repository.HackathonRepository;
+import com.greenmile.challenger.repository.TeamRepository;
 import com.greenmile.challenger.service.HackathonService;
 
 @Service
@@ -18,6 +19,9 @@ public class HackathonServiceImpl implements HackathonService {
 
 	@Autowired
 	private HackathonRepository hackathonRepository;
+	
+	@Autowired
+	private TeamRepository teamRepository;
 
 	@Override
 	public ResponseEntity<Hackathon> createHackathon(Hackathon hackathon) {
@@ -47,19 +51,19 @@ public class HackathonServiceImpl implements HackathonService {
 	@Override
 	public ResponseEntity<Page<Team>> getListAllTeams(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.hackathonRepository.getListAllTeamsByIdOfHackathon(idHackathon, pageable), HttpStatus.OK);
+		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsByIdOfHackathon(idHackathon, pageable), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Page<Team>> getListAllTeamsOrderByName(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.hackathonRepository.getListAllTeamsOrderByName(idHackathon, pageable), HttpStatus.OK);
+		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsOrderByName(idHackathon, pageable), HttpStatus.OK);
 	}
 	
 	@Override
 	public ResponseEntity<Page<Team>> getListAllTeamsOrderByRegistrationDate(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.hackathonRepository.getListAllTeamsOrderByRegistrationDate(idHackathon, pageable), HttpStatus.OK);
+		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsOrderByRegistrationDate(idHackathon, pageable), HttpStatus.OK);
 	}
 
 	@Override

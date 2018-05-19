@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -49,7 +49,7 @@ public @Data class Hackathon {
 	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
 	private String status;
 	
-	@ManyToOne
+	@OneToMany
 	private List<Team> teams;
 	
 	@ManyToMany
@@ -62,6 +62,6 @@ public @Data class Hackathon {
     		@JoinColumn(name="member_id")
     	}
     )
-	private List<Team> members; 
+	private List<Member> members; 
 
 }

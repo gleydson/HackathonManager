@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -49,7 +49,7 @@ public @Data class Team implements UserDetails {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date registrationDate;
 	
-	@OneToMany
+	@ManyToOne
 	private Hackathon hackathon;
 	
 	@ManyToMany
