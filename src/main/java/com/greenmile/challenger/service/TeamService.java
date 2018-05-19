@@ -1,13 +1,10 @@
 package com.greenmile.challenger.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import com.greenmile.challenger.bean.MemberTest;
+import com.greenmile.challenger.bean.Team;
 
 public interface TeamService {
-
-	ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable);
-
+	public ResponseEntity<Team> subscribe(Team team);
+	public ResponseEntity<Boolean> unsubscribe(Long idTeam);
 }

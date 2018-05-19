@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.greenmile.challenger.bean.Organizer;
+import com.greenmile.challenger.bean.Team;
 
 public class LoginFilterConfigJwt extends AbstractAuthenticationProcessingFilter {
 
@@ -29,8 +29,8 @@ public class LoginFilterConfigJwt extends AbstractAuthenticationProcessingFilter
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		
-		Organizer credentials = new ObjectMapper()
-				.readValue(request.getInputStream(), Organizer.class);
+		Team credentials = new ObjectMapper()
+				.readValue(request.getInputStream(), Team.class);
 		
 		return getAuthenticationManager().authenticate (
 			new UsernamePasswordAuthenticationToken (

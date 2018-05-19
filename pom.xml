@@ -86,9 +86,15 @@
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
-		
-				
 	</dependencies>
+	
+	<repositories>
+	    <!-- LOMBOK -->
+	    <repository>
+	        <id>projectlombok.org</id>
+	        <url>http://projectlombok.org/mavenrepo</url>
+	    </repository>
+	</repositories>
 
 	<build>
 		<plugins>

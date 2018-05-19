@@ -1,13 +1,19 @@
 package com.greenmile.challenger.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.greenmile.challenger.bean.MemberTest;
+import com.greenmile.challenger.bean.Hackathon;
+import com.greenmile.challenger.bean.Member;
+import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.exception.ConflictException;
+import com.greenmile.challenger.repository.HackathonRepository;
+import com.greenmile.challenger.repository.MemberRepository;
 import com.greenmile.challenger.repository.TeamRepository;
 import com.greenmile.challenger.service.TeamService;
 
@@ -15,11 +21,45 @@ import com.greenmile.challenger.service.TeamService;
 public class TeamServiceImpl implements TeamService {
 
 	@Autowired
-	private TeamRepository repository;
+	private TeamRepository teamRepository;
 	
+	@Autowired
+	private MemberRepository memberRepository;
+	
+	@Autowired
+	private HackathonRepository hackathonRepository;
+
 	@Override
-	public ResponseEntity<Page<MemberTest>> getListAllTeams(Pageable pageable) {
-		return new ResponseEntity<Page<MemberTest>>(this.repository.findAll(pageable), HttpStatus.OK);
+	public ResponseEntity<Team> subscribe(Team team) {
+		Hackathon hackathon = this.hackathonRepository.findById(team.getHackathon().getId()).get();
+		
+		Set<Member> allMembers = new HashSet<Member>();
+		
+		for (Team t : hackathon.getTeams() ) {
+			allMembers.addAll(t.getMembers());
+		}
+		
+		for (Member m : team.getMembers()) {
+			if (allMembers.contains(m)) {				
+				throw new ConflictException("This member is already participating in this hackathon in another team");
+			}
+		}
+		
+		Set<Member> membersThisTeam = new HashSet<Member>(team.getMembers());
+		
+		if (membersThisTeam.size() != team.getMembers().size()) {
+			throw new ConflictException("There can be no duplicate members");
+		}
+		
+		this.memberRepository.saveAll(team.getMembers());
+		
+		return new ResponseEntity<>(this.teamRepository.save(team), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Boolean> unsubscribe(Long id) {
+		this.teamRepository.deleteById(id);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
 }
