@@ -1,7 +1,13 @@
 package com.greenmile.challenger.service.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_HACKATHON_NOT_FOUND;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_MEMBER_IS_ALREADY_PARTICIPATING_IN_THIS_HACKATHON;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_MEMBER_IS_NOT_REGISTERED_IN_THE_SYSTEM;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_NAME_OF_THIS_TEAM_IS_ALREADY_IN_USE;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_NUMBER_OF_MEMBERS_GREATER_THAN_ALLOWED;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +18,9 @@ import com.greenmile.challenger.bean.Hackathon;
 import com.greenmile.challenger.bean.Member;
 import com.greenmile.challenger.bean.Team;
 import com.greenmile.challenger.exception.BadRequestException;
+import com.greenmile.challenger.exception.ResourceNotFoundException;
 import com.greenmile.challenger.repository.HackathonRepository;
+import com.greenmile.challenger.repository.MemberRepository;
 import com.greenmile.challenger.repository.TeamRepository;
 import com.greenmile.challenger.service.TeamService;
 
@@ -23,47 +31,92 @@ public class TeamServiceImpl implements TeamService {
 	private TeamRepository teamRepository;
 	
 	@Autowired
+	private MemberRepository memberRepository;
+	
+	@Autowired
 	private HackathonRepository hackathonRepository;
 
 	@Override
-	public ResponseEntity<Team> subscribe(Team team) {
-		Hackathon hackathon = this.hackathonRepository.findById(team.getHackathon().getId()).get();
-		
-		for (Team t : hackathon.getTeams()) {
-			if (t.getName().equals(team.getName())) {
-				throw new BadRequestException("This team name is already being used");
-			}
+	public ResponseEntity<Team> subscribe(Long idHackathon, Team team) {
+
+		if (!hackathonExist(idHackathon)) {
+			throw new ResourceNotFoundException(EXCEPTION_HACKATHON_NOT_FOUND);
 		}
 		
-		if (team.getMembers().size() > hackathon.getNumberOfMembersPerTeam()) {
-			throw new BadRequestException("Number of participants greater than allowed");
-		}
-
-		for (Member mTeam : team.getMembers()) {
-			for (Member mHack : hackathon.getMembers()) {
-				if (mTeam.getName().equals(mHack.getName()) && mTeam.getEmail().equals(mHack.getEmail())) {					
-					throw new BadRequestException("This member is already participating in this hackathon in another team");
-				}
-			}
-		}
-
-
-		Set<Member> membersThisTeam = new HashSet<Member>(team.getMembers());
-		if (membersThisTeam.size() != team.getMembers().size()) {
-			throw new BadRequestException("There can be no duplicate members");
-		}
-
-		Team t = this.teamRepository.save(team);
+		Hackathon hackathon = this.hackathonRepository.findById(idHackathon).get();
 		
-		hackathon.getTeams().add(t);
-		hackathon.getMembers().addAll(team.getMembers());
-		return new ResponseEntity<>(t, HttpStatus.OK);
+		if (this.theAmountOfMembersIsOk(team, hackathon)) { //not works
+			throw new BadRequestException(EXCEPTION_NUMBER_OF_MEMBERS_GREATER_THAN_ALLOWED);
+		}
+		
+		if (!this.membersNotExist(team)) { //not works
+			throw new BadRequestException(EXCEPTION_MEMBER_IS_NOT_REGISTERED_IN_THE_SYSTEM);
+		}
+
+		if (this.areTheMembersAlreadyIsThisHackathon(team, hackathon)) { //not works
+			throw new BadRequestException(EXCEPTION_MEMBER_IS_ALREADY_PARTICIPATING_IN_THIS_HACKATHON);
+		}
+		
+		if (this.thisTeamNameIsAlreadyInUse(team, hackathon)) {
+			throw new BadRequestException(EXCEPTION_NAME_OF_THIS_TEAM_IS_ALREADY_IN_USE);
+		}
+		
+		team.addMember(this.getMembersListOfDataBase(team));
+		hackathon.addTeam(team);
+		
+		return new ResponseEntity<Team>(this.teamRepository.save(team), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Boolean> unsubscribe(Long id) {
 		this.teamRepository.deleteById(id);
 		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
+	
+	private Boolean hackathonExist(Long idHackathon) {
+		return this.hackathonRepository.existsById(idHackathon);
+	}
+	
+	private Boolean theAmountOfMembersIsOk(Team team, Hackathon hackathon) {
+		System.out.println(team.getMembers().size());
+		return team.getMembers().size() > hackathon.getNumberOfMembersPerTeam();
+	}
+	
+	private Boolean membersNotExist(Team team) {
+		for (Member member : this.getMembersListOfDataBase(team)) {
+			if (!this.memberRepository.existsById(member.getId())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private List<Member> getMembersListOfDataBase(Team team) {
+		List<Member> members = new ArrayList<>();
+		for (Member member : team.getMembers()) {
+			members.add(this.memberRepository.findByEmail(member.getEmail()));
+		}
+		return members;
+	}
+	
+	private Boolean areTheMembersAlreadyIsThisHackathon(Team team, Hackathon hackathon) {
+		for (Member memberThisTeam : this.getMembersListOfDataBase(team)) {
+			for (Member memberThisHackathon : hackathon.getMembers()) {
+				if (memberThisTeam.getEmail().equals(memberThisHackathon.getEmail())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private Boolean thisTeamNameIsAlreadyInUse(Team team, Hackathon hackathon) {
+		for (Team t : hackathon.getTeams()) {
+			if (t.getName().equals(team.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

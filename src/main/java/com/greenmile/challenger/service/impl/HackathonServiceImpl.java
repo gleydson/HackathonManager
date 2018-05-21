@@ -1,5 +1,7 @@
 package com.greenmile.challenger.service.impl;
 
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_HACKATHON_NOT_FOUND;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Hackathon;
 import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.bean.enumeration.HackathonStatus;
 import com.greenmile.challenger.exception.ResourceNotFoundException;
 import com.greenmile.challenger.repository.HackathonRepository;
 import com.greenmile.challenger.repository.TeamRepository;
@@ -27,7 +30,7 @@ public class HackathonServiceImpl implements HackathonService {
 
 	@Override
 	public ResponseEntity<Hackathon> createHackathon(Hackathon hackathon) {
-		hackathon.setStatus("OPEN");
+		hackathon.setStatus(HackathonStatus.OPEN);
 		return new ResponseEntity<Hackathon>(this.hackathonRepository.save(hackathon), HttpStatus.OK);
 	}
 
@@ -76,13 +79,14 @@ public class HackathonServiceImpl implements HackathonService {
 	@Override
 	public ResponseEntity<Boolean> endSubscriptions(Long id) {
 		this.verifyIsHackathonExists(id);
-		this.hackathonRepository.getById(id).setStatus("FINALIZED");
+		Hackathon hackathon = this.hackathonRepository.findById(id).get();
+		hackathon.setStatus(HackathonStatus.CLOSED);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
 	private void verifyIsHackathonExists(Long id) {
 		if (!this.hackathonRepository.existsById(id)) {
-			throw new ResourceNotFoundException("Hackathon not found for id = " + id);
+			throw new ResourceNotFoundException(EXCEPTION_HACKATHON_NOT_FOUND);
 		}
 	}
 

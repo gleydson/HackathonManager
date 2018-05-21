@@ -1,9 +1,13 @@
 package com.greenmile.challenger.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,13 +20,14 @@ import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.greenmile.challenger.bean.enumeration.HackathonStatus;
 
 import lombok.Data;
 
 @Entity
 public @Data class Hackathon {
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull
@@ -31,7 +36,7 @@ public @Data class Hackathon {
 	@NotNull
 	private String description;
 	
-	@NotNull
+	@NotNull	
 	private String local;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -44,13 +49,13 @@ public @Data class Hackathon {
 	@NotNull
 	private Integer numberOfTeam;
 	
-	@NotNull
-	private String status;
+	@NotNull @Enumerated(EnumType.STRING)
+	private HackathonStatus status;
 	
 	@OneToMany
 	private List<Team> teams;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     	name="hackathon_has_member",
     	joinColumns= {
@@ -62,7 +67,10 @@ public @Data class Hackathon {
     )
 	private List<Member> members; 
 	
-	public Hackathon() { }
+	public Hackathon() {
+		this.members = new ArrayList<>();
+		this.teams = new ArrayList<>();
+	}
 	
 	public Hackathon(String name, 
 					String description, 
@@ -70,7 +78,7 @@ public @Data class Hackathon {
 					Date date, 
 					Integer numberOfMembersPerTeam,
 					Integer numberOfTeam,
-					String status,
+					HackathonStatus status,
 					List<Team> teams,
 					List<Member> members) {
 		this.name = name;
@@ -82,6 +90,12 @@ public @Data class Hackathon {
 		this.status = status;
 		this.teams = teams;
 		this.members = members;
+	}
+	
+	public void addTeam(Team team) {
+		this.teams.add(team);
+		team.setHackathon(this);
+		this.getMembers().addAll(team.getMembers());
 	}
 
 }

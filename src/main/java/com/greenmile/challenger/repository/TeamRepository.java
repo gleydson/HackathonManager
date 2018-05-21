@@ -11,6 +11,7 @@ import com.greenmile.challenger.bean.Team;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {	
+	
 	public Team findByUsername(String username);
 	
 	@Query("SELECT t FROM Team t WHERE t.hackathon.id = :idHackathon")

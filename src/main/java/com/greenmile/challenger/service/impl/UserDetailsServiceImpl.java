@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Team;
+import com.greenmile.challenger.exception.ResourceNotFoundException;
 import com.greenmile.challenger.repository.TeamRepository;
 
 
@@ -19,8 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Team team = repository.findByUsername(username);
-		String ORGANIZER_NOT_FOUND_EXCEPTION = "Team not found!";
-		if (team == null) throw new UsernameNotFoundException(ORGANIZER_NOT_FOUND_EXCEPTION );
+		if (team == null) {
+			throw new ResourceNotFoundException("Team not found!");
+		}
 		return team;
 	}
 

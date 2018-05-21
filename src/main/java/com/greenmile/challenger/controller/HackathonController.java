@@ -1,6 +1,6 @@
 package com.greenmile.challenger.controller;
 
-import static com.greenmile.challenger.util.ConstantsUtil.HACKATHON;
+import static com.greenmile.challenger.util.ConstantsUtil.API_HACKATHON;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import com.greenmile.challenger.service.HackathonService;
 
 @RestController
 @Transactional
-@RequestMapping(HACKATHON)
+@RequestMapping(API_HACKATHON)
 public class HackathonController {
 
 	@Autowired

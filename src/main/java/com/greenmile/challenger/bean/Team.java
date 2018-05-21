@@ -1,5 +1,6 @@
 package com.greenmile.challenger.bean;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -28,7 +30,7 @@ public @Data class Team implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull @Column(unique = true)
@@ -45,10 +47,10 @@ public @Data class Team implements UserDetails {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date registrationDate;
 	
-	@ManyToOne
+	@ManyToOne @JsonIgnore
 	private Hackathon hackathon;
 	
-	@ManyToMany
+	@ManyToMany @JsonIgnore
     @JoinTable(
     	name="team_has_member",
     	joinColumns= {
@@ -61,7 +63,7 @@ public @Data class Team implements UserDetails {
 	private List<Member> members;
 	
 	public Team() {
-		
+		this.members = new ArrayList<>();
 	}
 	
 	public Team(String name, String username, String password, Date registrationDate, Hackathon hackathon, List<Member> members) {
@@ -71,6 +73,18 @@ public @Data class Team implements UserDetails {
 		this.registrationDate = registrationDate;
 		this.hackathon = hackathon;
 		this.members = members;
+	}
+	
+	public void addMember(Member member) {
+		this.members.add(member);
+		member.getTeams().add(this);
+	}
+	
+	public void addMember(List<Member> members) {
+		this.setMembers(members);
+		for (Member member : members) {
+			member.getTeams().add(this);
+		}
 	}
 
 	@Override

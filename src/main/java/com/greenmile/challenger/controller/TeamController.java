@@ -1,6 +1,6 @@
 package com.greenmile.challenger.controller;
 
-import static com.greenmile.challenger.util.ConstantsUtil.TEAM;
+import static com.greenmile.challenger.util.ConstantsUtil.API_TEAM;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +15,20 @@ import com.greenmile.challenger.bean.Team;
 import com.greenmile.challenger.service.TeamService;
 
 @RestController
-@RequestMapping(TEAM)
+@RequestMapping(API_TEAM)
 public class TeamController {
 	
 	@Autowired
 	private TeamService service;
 	
-	@PostMapping
-	public ResponseEntity<Team> subscribe(@RequestBody Team team) {
-		return this.service.subscribe(team);
+	@PostMapping("/{idHackathon}/subscribe")
+	public ResponseEntity<Team> subscribe(@PathVariable Long idHackathon, @RequestBody Team team) {
+		return this.service.subscribe(idHackathon, team);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> unsubscribe(@PathVariable Long id) {
-		return this.service.unsubscribe(id);
+	@DeleteMapping("/{idTeam}")
+	public ResponseEntity<Boolean> unsubscribe(@PathVariable Long idTeam) {
+		return this.service.unsubscribe(idTeam);
 	}
 	
 }
