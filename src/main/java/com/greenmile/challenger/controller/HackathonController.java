@@ -2,10 +2,13 @@ package com.greenmile.challenger.controller;
 
 import static com.greenmile.challenger.util.ConstantsUtil.HACKATHON;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,28 +23,34 @@ import com.greenmile.challenger.bean.Team;
 import com.greenmile.challenger.service.HackathonService;
 
 @RestController
+@Transactional
 @RequestMapping(HACKATHON)
 public class HackathonController {
 
 	@Autowired
 	private HackathonService hackathonService;
 	
-	@PostMapping("/create-hackathon")
+	@PostMapping
 	public ResponseEntity<Hackathon> createHackathon(@RequestBody Hackathon hackathon) {
 		return this.hackathonService.createHackathon(hackathon);
 	}
 	
-	@GetMapping("/get-hackathon/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Hackathon> getHackathonById(@PathVariable Long id) {
 		return this.hackathonService.getHackathonById(id);
 	}
 	
-	@PutMapping("/update-hackathon")
+	@GetMapping
+	public ResponseEntity<List<Hackathon>> getAllHackathon() {
+		return this.hackathonService.getAllHackathon();
+	}
+	
+	@PutMapping
 	public ResponseEntity<Hackathon> updateHackathon(@RequestBody Hackathon hackathon) {
 		return this.hackathonService.updateHackathon(hackathon);
 	}
 	
-	@DeleteMapping("/delete-hackathon/idHackathon")
+	@DeleteMapping("/{idHackathon}")
 	public ResponseEntity<Boolean> deleteHackathonById(@PathVariable Long idHackathon) {
 		return this.hackathonService.deleteHackathonById(idHackathon);
 	}
@@ -65,7 +74,5 @@ public class HackathonController {
 	public ResponseEntity<Boolean> endSubscriptions(@PathVariable Long idHackathon) {
 		return this.hackathonService.endSubscriptions(idHackathon);
 	}
-	
-
 	
 }

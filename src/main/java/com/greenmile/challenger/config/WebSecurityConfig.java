@@ -19,7 +19,7 @@ import com.greenmile.challenger.config.jwt.LoginFilterConfigJwt;
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -27,21 +27,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String login = "/login";
-		String index = "/";
 		
-		http.cors().and().csrf().disable();
+		final String[] PUBLIC_MATCHERS = {
+				"/h2-console/**"
+		};
+		
+		final String[] PUBLIC_MATCHERS_GET = {
+				"/api/hackathon"
+		};
+		
+		final String[] PUBLIC_MATCHERS_POST = {
+				"/login",
+				"/api/team"
+		};
+		
+		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.POST, login).permitAll()
-			.antMatchers(HttpMethod.GET, index).permitAll()
+			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.anyRequest().authenticated();
 			
-		http.addFilterBefore(new LoginFilterConfigJwt(login,
-			authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new LoginFilterConfigJwt(PUBLIC_MATCHERS_POST[0], authenticationManager()), 
+				UsernamePasswordAuthenticationFilter.class);
 		
 		http.addFilterBefore(new AuthenticationFilterConfigJwt(),
-			UsernamePasswordAuthenticationFilter.class);
+				UsernamePasswordAuthenticationFilter.class);
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
@@ -52,15 +64,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.inMemoryAuthentication()
 				.passwordEncoder(NoOpPasswordEncoder.getInstance())
 					.withUser("admin")
-					.password("123")
-					.authorities("ROLE_ADMIN");
-		auth
-			.inMemoryAuthentication()
-				.passwordEncoder(NoOpPasswordEncoder.getInstance())
-					.withUser("user")
-					.password("123")
-					.authorities("ROLE_USER");
-		auth.userDetailsService(userDetailsService);		
+					.password("admin")
+					.roles("ADMIN");
+		auth.userDetailsService(userDetailsService);//.passwordEncoder(bCryptPasswordEncoder());
 	}
 	
+	/*@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}*/
 }

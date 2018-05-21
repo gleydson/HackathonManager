@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,27 +25,26 @@ public @Data class Hackathon {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
-	private String nameEvent;
+	@NotNull
+	private String name;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	private String description;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	private String local;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date date;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
-	private int numberOfParticipantsPerTeam;
+	@NotNull
+	private Integer numberOfMembersPerTeam;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
-	private int numberOfTeam;
+	@NotNull
+	private Integer numberOfTeam;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	private String status;
 	
 	@OneToMany
@@ -63,5 +61,27 @@ public @Data class Hackathon {
     	}
     )
 	private List<Member> members; 
+	
+	public Hackathon() { }
+	
+	public Hackathon(String name, 
+					String description, 
+					String local, 
+					Date date, 
+					Integer numberOfMembersPerTeam,
+					Integer numberOfTeam,
+					String status,
+					List<Team> teams,
+					List<Member> members) {
+		this.name = name;
+		this.description = description;
+		this.local = local;
+		this.date = date;
+		this.numberOfMembersPerTeam = numberOfMembersPerTeam;
+		this.numberOfTeam = numberOfTeam;
+		this.status = status;
+		this.teams = teams;
+		this.members = members;
+	}
 
 }

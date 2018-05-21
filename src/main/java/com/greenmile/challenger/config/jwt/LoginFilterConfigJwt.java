@@ -32,17 +32,17 @@ public class LoginFilterConfigJwt extends AbstractAuthenticationProcessingFilter
 		Team credentials = new ObjectMapper()
 				.readValue(request.getInputStream(), Team.class);
 		
-		return getAuthenticationManager().authenticate (
-			new UsernamePasswordAuthenticationToken (
-					credentials.getUsername(), 
-					credentials.getPassword(), 
-					Collections.emptyList()
-			)
-		);
+		return getAuthenticationManager().authenticate(
+				new UsernamePasswordAuthenticationToken(
+						credentials.getUsername(), 
+						credentials.getPassword(), 
+						Collections.emptyList()
+						)
+				);
 	}
 	
 	@Override
-	protected void successfulAuthentication (
+	protected void successfulAuthentication(
 			HttpServletRequest request, 
 			HttpServletResponse response,
 			FilterChain filterChain,

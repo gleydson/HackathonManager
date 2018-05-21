@@ -30,4 +30,5 @@ public class TeamController {
 	public ResponseEntity<Boolean> unsubscribe(@PathVariable Long id) {
 		return this.service.unsubscribe(id);
 	}
+	
 }

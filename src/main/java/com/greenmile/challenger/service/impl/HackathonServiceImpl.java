@@ -1,5 +1,7 @@
 package com.greenmile.challenger.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,11 @@ public class HackathonServiceImpl implements HackathonService {
 	public ResponseEntity<Hackathon> getHackathonById(Long id) {
 		this.verifyIsHackathonExists(id);
 		return new ResponseEntity<Hackathon>(this.hackathonRepository.findById(id).get(), HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<List<Hackathon>> getAllHackathon() {
+		return new ResponseEntity<List<Hackathon>>(this.hackathonRepository.findAll(), HttpStatus.OK);
 	}
 
 	@Override
@@ -69,12 +76,12 @@ public class HackathonServiceImpl implements HackathonService {
 	@Override
 	public ResponseEntity<Boolean> endSubscriptions(Long id) {
 		this.verifyIsHackathonExists(id);
-		this.hackathonRepository.findById(id).get().setStatus("FINALIZED");
+		this.hackathonRepository.getById(id).setStatus("FINALIZED");
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 	
 	private void verifyIsHackathonExists(Long id) {
-		if (this.hackathonRepository.findById(id).get() == null) {
+		if (!this.hackathonRepository.existsById(id)) {
 			throw new ResourceNotFoundException("Hackathon not found for id = " + id);
 		}
 	}

@@ -2,7 +2,7 @@ package com.greenmile.challenger.bean;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,30 +20,27 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Entity
 public @Data class Team implements UserDetails {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@NotNull @Column(unique = true)
-	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String name;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	private String username;
 	
-	@NotNull @JsonIgnore
-	@NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	private String password;
 	
-	@NotNull @NotEmpty(message = "Preenchimento Obrigatório")
+	@NotNull
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date registrationDate;
@@ -62,7 +58,20 @@ public @Data class Team implements UserDetails {
     		@JoinColumn(name="member_id")
     	}
     )
-	private Set<Member> members;
+	private List<Member> members;
+	
+	public Team() {
+		
+	}
+	
+	public Team(String name, String username, String password, Date registrationDate, Hackathon hackathon, List<Member> members) {
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.registrationDate = registrationDate;
+		this.hackathon = hackathon;
+		this.members = members;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
