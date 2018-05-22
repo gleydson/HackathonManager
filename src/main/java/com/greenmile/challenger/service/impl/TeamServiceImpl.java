@@ -37,7 +37,7 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public Team subscribe(Long idHackathon, Team team) {
-
+		
 		if (!hackathonExist(idHackathon)) {
 			throw new ResourceNotFoundException(EXCEPTION_HACKATHON_NOT_FOUND);
 		}

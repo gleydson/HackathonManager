@@ -22,6 +22,5 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 	
 	@Query("SELECT t FROM Team t WHERE t.hackathon.id = :idHackathon ORDER BY t.registrationDate")
 	public Page<Team> getListAllTeamsOrderByRegistrationDate(@Param("idHackathon") Long id, Pageable pageable);
-
 	
 }

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
+	
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsConfigFilter implements Filter {
@@ -40,4 +40,5 @@ public class CorsConfigFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException { }
+	
 }

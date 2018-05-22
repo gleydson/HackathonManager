@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
-@Entity
-public @Data class Team implements UserDetails {
+@Entity @Data
+public class Team implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
