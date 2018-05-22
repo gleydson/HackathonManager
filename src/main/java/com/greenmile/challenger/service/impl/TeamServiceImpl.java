@@ -5,6 +5,7 @@ import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_MEMBER_IS_AL
 import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_MEMBER_IS_NOT_REGISTERED_IN_THE_SYSTEM;
 import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_NAME_OF_THIS_TEAM_IS_ALREADY_IN_USE;
 import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_NUMBER_OF_MEMBERS_GREATER_THAN_ALLOWED;
+import static com.greenmile.challenger.util.ConstantsUtil.EXCEPTION_TEAM_NOT_FOUND;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,14 @@ public class TeamServiceImpl implements TeamService {
 		this.hackathonRepository.save(hackathon);
 		
 		return new ResponseEntity<Team>(teamRescue, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Team> getTeam(Long idTeam) {
+		if (!this.teamRepository.existsById(idTeam)) {
+			throw new ResourceNotFoundException(EXCEPTION_TEAM_NOT_FOUND);
+		}
+		return new ResponseEntity<Team>(this.teamRepository.findById(idTeam).get(), HttpStatus.OK);
 	}
 
 	@Override

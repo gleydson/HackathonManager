@@ -6,5 +6,6 @@ import com.greenmile.challenger.bean.Team;
 
 public interface TeamService {
 	public ResponseEntity<Team> subscribe(Long idHackathon, Team team);
+	public ResponseEntity<Team> getTeam(Long idTeam);
 	public ResponseEntity<Boolean> unsubscribe(Long idTeam);
 }

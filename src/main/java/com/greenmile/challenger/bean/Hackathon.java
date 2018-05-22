@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,7 +54,7 @@ public @Data class Hackathon {
 	@OneToMany
 	private List<Team> teams;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
     @JoinTable(
     	name="hackathon_has_member",
     	joinColumns= {

@@ -9,6 +9,7 @@ public class ConstantsUtil {
 	public static final String API_MEMBER = "/api/member";
 	
 	public static final String EXCEPTION_HACKATHON_NOT_FOUND = "The Hackathon reporting id is not associated with any events registered to our system";
+	public static final String EXCEPTION_TEAM_NOT_FOUND = "The id Team is not registered in our system";
 	public static final String EXCEPTION_NUMBER_OF_MEMBERS_GREATER_THAN_ALLOWED = "Number of members greater than allowed by team";
 	public static final String EXCEPTION_MEMBER_IS_ALREADY_PARTICIPATING_IN_THIS_HACKATHON = "You have registered a member who is already participating in this hackathon in another team";
 	public static final String EXCEPTION_NAME_OF_THIS_TEAM_IS_ALREADY_IN_USE = "The name of this team is already being used in this hackathon";
