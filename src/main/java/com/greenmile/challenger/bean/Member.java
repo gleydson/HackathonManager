@@ -10,44 +10,37 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.greenmile.challenger.bean.enumeration.ShirtSize;
+
 import lombok.Data;
 
 @Entity
-public @Data class Member implements Comparable<Member> {
+public @Data class Member {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
+	private String pathPhoto;
+	
 	private String name;
 	
 	@NotNull
 	private String email;
 	
-	@NotNull
 	private String phone;
 	
-	@NotNull
-	private String shirtSize;
+	private ShirtSize shirtSize;
 	
-	@ManyToMany(mappedBy="members")
+	@ManyToMany(mappedBy="members") @JsonIgnore
 	private List<Team> teams;
 	
 	public Member() {
 		this.teams = new ArrayList<>();
 	}
 	
-	public Member(String name, String email, String phone, String shirtSize, List<Team> teams) {
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.shirtSize = shirtSize;
-		this.teams = teams;
-	}
-
-	@Override
-	public int compareTo(Member o) {
-		return this.getEmail().compareTo(o.getEmail());
+	public void addTeam(Team team) {
+		this.teams.add(team);
 	}
 	
 }

@@ -72,29 +72,8 @@ public @Data class Hackathon {
 		this.teams = new ArrayList<>();
 	}
 	
-	public Hackathon(String name, 
-					String description, 
-					String local, 
-					Date date, 
-					Integer numberOfMembersPerTeam,
-					Integer numberOfTeam,
-					HackathonStatus status,
-					List<Team> teams,
-					List<Member> members) {
-		this.name = name;
-		this.description = description;
-		this.local = local;
-		this.date = date;
-		this.numberOfMembersPerTeam = numberOfMembersPerTeam;
-		this.numberOfTeam = numberOfTeam;
-		this.status = status;
-		this.teams = teams;
-		this.members = members;
-	}
-	
 	public void addTeam(Team team) {
 		this.teams.add(team);
-		team.setHackathon(this);
 		this.getMembers().addAll(team.getMembers());
 	}
 

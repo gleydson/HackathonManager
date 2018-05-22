@@ -45,15 +45,15 @@ public class TeamServiceImpl implements TeamService {
 		
 		Hackathon hackathon = this.hackathonRepository.findById(idHackathon).get();
 		
-		if (this.theAmountOfMembersIsOk(team, hackathon)) { //not works
+		if (this.theAmountOfMembersIsOk(team, hackathon)) {
 			throw new BadRequestException(EXCEPTION_NUMBER_OF_MEMBERS_GREATER_THAN_ALLOWED);
 		}
 		
-		if (!this.membersNotExist(team)) { //not works
+		if (!this.membersNotExist(team)) {
 			throw new BadRequestException(EXCEPTION_MEMBER_IS_NOT_REGISTERED_IN_THE_SYSTEM);
 		}
 
-		if (this.areTheMembersAlreadyIsThisHackathon(team, hackathon)) { //not works
+		if (this.areTheMembersAlreadyIsThisHackathon(team, hackathon)) {
 			throw new BadRequestException(EXCEPTION_MEMBER_IS_ALREADY_PARTICIPATING_IN_THIS_HACKATHON);
 		}
 		
@@ -62,9 +62,18 @@ public class TeamServiceImpl implements TeamService {
 		}
 		
 		team.addMember(this.getMembersListOfDataBase(team));
-		hackathon.addTeam(team);
+		team.addHackathon(hackathon);
+		Team teamRescue = this.teamRepository.save(team);
 		
-		return new ResponseEntity<Team>(this.teamRepository.save(team), HttpStatus.OK);
+		hackathon.addTeam(teamRescue);
+		for (Member m : team.getMembers()) {
+			m.addTeam(teamRescue);
+		}
+		
+		this.memberRepository.saveAll(team.getMembers());
+		this.hackathonRepository.save(hackathon);
+		
+		return new ResponseEntity<Team>(teamRescue, HttpStatus.OK);
 	}
 
 	@Override
@@ -78,12 +87,14 @@ public class TeamServiceImpl implements TeamService {
 	}
 	
 	private Boolean theAmountOfMembersIsOk(Team team, Hackathon hackathon) {
-		System.out.println(team.getMembers().size());
 		return team.getMembers().size() > hackathon.getNumberOfMembersPerTeam();
 	}
 	
 	private Boolean membersNotExist(Team team) {
 		for (Member member : this.getMembersListOfDataBase(team)) {
+			if (member == null) {
+				return false;
+			}
 			if (!this.memberRepository.existsById(member.getId())) {
 				return false;
 			}
@@ -100,11 +111,9 @@ public class TeamServiceImpl implements TeamService {
 	}
 	
 	private Boolean areTheMembersAlreadyIsThisHackathon(Team team, Hackathon hackathon) {
-		for (Member memberThisTeam : this.getMembersListOfDataBase(team)) {
-			for (Member memberThisHackathon : hackathon.getMembers()) {
-				if (memberThisTeam.getEmail().equals(memberThisHackathon.getEmail())) {
-					return true;
-				}
+		for (Member member : this.getMembersListOfDataBase(team)) {
+			if (hackathon.getMembers().contains(member)) {
+				return true;
 			}
 		}
 		return false;

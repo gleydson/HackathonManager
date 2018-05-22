@@ -50,7 +50,7 @@ public @Data class Team implements UserDetails {
 	@ManyToOne @JsonIgnore
 	private Hackathon hackathon;
 	
-	@ManyToMany @JsonIgnore
+	@ManyToMany
     @JoinTable(
     	name="team_has_member",
     	joinColumns= {
@@ -66,15 +66,6 @@ public @Data class Team implements UserDetails {
 		this.members = new ArrayList<>();
 	}
 	
-	public Team(String name, String username, String password, Date registrationDate, Hackathon hackathon, List<Member> members) {
-		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.registrationDate = registrationDate;
-		this.hackathon = hackathon;
-		this.members = members;
-	}
-	
 	public void addMember(Member member) {
 		this.members.add(member);
 		member.getTeams().add(this);
@@ -82,9 +73,10 @@ public @Data class Team implements UserDetails {
 	
 	public void addMember(List<Member> members) {
 		this.setMembers(members);
-		for (Member member : members) {
-			member.getTeams().add(this);
-		}
+	}
+	
+	public void addHackathon(Hackathon hackathon) {
+		this.setHackathon(hackathon);
 	}
 
 	@Override
