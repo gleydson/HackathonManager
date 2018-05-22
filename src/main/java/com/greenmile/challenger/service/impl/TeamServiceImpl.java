@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Hackathon;
@@ -38,7 +36,7 @@ public class TeamServiceImpl implements TeamService {
 	private HackathonRepository hackathonRepository;
 
 	@Override
-	public ResponseEntity<Team> subscribe(Long idHackathon, Team team) {
+	public Team subscribe(Long idHackathon, Team team) {
 
 		if (!hackathonExist(idHackathon)) {
 			throw new ResourceNotFoundException(EXCEPTION_HACKATHON_NOT_FOUND);
@@ -74,21 +72,21 @@ public class TeamServiceImpl implements TeamService {
 		this.memberRepository.saveAll(team.getMembers());
 		this.hackathonRepository.save(hackathon);
 		
-		return new ResponseEntity<Team>(teamRescue, HttpStatus.OK);
+		return teamRescue;
 	}
 	
 	@Override
-	public ResponseEntity<Team> getTeam(Long idTeam) {
+	public Team getTeam(Long idTeam) {
 		if (!this.teamRepository.existsById(idTeam)) {
 			throw new ResourceNotFoundException(EXCEPTION_TEAM_NOT_FOUND);
 		}
-		return new ResponseEntity<Team>(this.teamRepository.findById(idTeam).get(), HttpStatus.OK);
+		return this.teamRepository.findById(idTeam).get();
 	}
 
 	@Override
-	public ResponseEntity<Boolean> unsubscribe(Long id) {
+	public Boolean unsubscribe(Long id) {
 		this.teamRepository.deleteById(id);
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		return true;
 	}
 	
 	private Boolean hackathonExist(Long idHackathon) {

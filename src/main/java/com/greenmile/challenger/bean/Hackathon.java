@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,32 +23,33 @@ import com.greenmile.challenger.bean.enumeration.HackathonStatus;
 
 import lombok.Data;
 
-@Entity
-public @Data class Hackathon {
+@Entity @Data
+public class Hackathon {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
+	@NotEmpty
 	private String name;
 	
-	@NotNull
+	@NotEmpty
 	private String description;
 	
-	@NotNull	
+	@NotEmpty	
 	private String local;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy")
+	@NotEmpty
 	private Date date;
 	
-	@NotNull
+	@NotEmpty
 	private Integer numberOfMembersPerTeam;
 	
-	@NotNull
+	@NotEmpty
 	private Integer numberOfTeam;
 	
-	@NotNull @Enumerated(EnumType.STRING)
+	@NotEmpty @Enumerated(EnumType.STRING)
 	private HackathonStatus status;
 	
 	@OneToMany
@@ -67,6 +68,13 @@ public @Data class Hackathon {
 	private List<Member> members; 
 	
 	public Hackathon() {
+		this.name = null;
+		this.description = null;
+		this.local = null;
+		this.date = null;
+		this.numberOfMembersPerTeam = null;
+		this.numberOfTeam = null;
+		this.status = null;
 		this.members = new ArrayList<>();
 		this.teams = new ArrayList<>();
 	}

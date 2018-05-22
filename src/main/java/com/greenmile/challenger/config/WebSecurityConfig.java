@@ -10,13 +10,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.greenmile.challenger.config.jwt.AuthenticationFilterConfigJwt;
 import com.greenmile.challenger.config.jwt.LoginFilterConfigJwt;
 
-@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -41,8 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/api/team"
 		};
 		
-		http.csrf().disable();
-		
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
@@ -62,15 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.inMemoryAuthentication()
-				.passwordEncoder(NoOpPasswordEncoder.getInstance())
 					.withUser("admin")
 					.password("admin")
 					.roles("ADMIN");
-		auth.userDetailsService(userDetailsService);//.passwordEncoder(bCryptPasswordEncoder());
+		auth.userDetailsService(userDetailsService);
 	}
-	
-	/*@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}*/
+
 }

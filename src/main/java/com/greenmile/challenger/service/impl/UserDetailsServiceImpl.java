@@ -10,7 +10,6 @@ import com.greenmile.challenger.bean.Team;
 import com.greenmile.challenger.exception.ResourceNotFoundException;
 import com.greenmile.challenger.repository.TeamRepository;
 
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

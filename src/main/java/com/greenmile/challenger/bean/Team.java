@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,16 +33,16 @@ public @Data class Team implements UserDetails {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull @Column(unique = true)
+	@NotEmpty @Column(unique = true)
 	private String name;
 	
-	@NotNull
+	@NotEmpty
 	private String username;
 	
-	@NotNull
+	@NotEmpty
 	private String password;
 	
-	@NotNull
+	@NotEmpty
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date registrationDate;
@@ -63,6 +63,10 @@ public @Data class Team implements UserDetails {
 	private List<Member> members;
 	
 	public Team() {
+		this.name = null;
+		this.username = null;
+		this.password = null;
+		this.registrationDate = null;
 		this.members = new ArrayList<>();
 	}
 	

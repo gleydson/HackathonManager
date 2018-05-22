@@ -7,8 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.greenmile.challenger.bean.Hackathon;
@@ -29,59 +27,59 @@ public class HackathonServiceImpl implements HackathonService {
 	private TeamRepository teamRepository;
 
 	@Override
-	public ResponseEntity<Hackathon> createHackathon(Hackathon hackathon) {
+	public Hackathon createHackathon(Hackathon hackathon) {
 		hackathon.setStatus(HackathonStatus.OPEN);
-		return new ResponseEntity<Hackathon>(this.hackathonRepository.save(hackathon), HttpStatus.OK);
+		return this.hackathonRepository.save(hackathon);
 	}
 
 	@Override
-	public ResponseEntity<Hackathon> getHackathonById(Long id) {
+	public Hackathon getHackathonById(Long id) {
 		this.verifyIsHackathonExists(id);
-		return new ResponseEntity<Hackathon>(this.hackathonRepository.findById(id).get(), HttpStatus.OK);
+		return this.hackathonRepository.findById(id).get();
 	}
 	
 	@Override
-	public ResponseEntity<List<Hackathon>> getAllHackathon() {
-		return new ResponseEntity<List<Hackathon>>(this.hackathonRepository.findAll(), HttpStatus.OK);
+	public List<Hackathon> getAllHackathon() {
+		return this.hackathonRepository.findAll();
 	}
 
 	@Override
-	public ResponseEntity<Hackathon> updateHackathon(Hackathon hackathon) {
+	public Hackathon updateHackathon(Hackathon hackathon) {
 		this.verifyIsHackathonExists(hackathon.getId());
-		return new ResponseEntity<Hackathon>(this.hackathonRepository.save(hackathon), HttpStatus.OK);
+		return this.hackathonRepository.save(hackathon);
 	}
 
 	@Override
-	public ResponseEntity<Boolean> deleteHackathonById(Long id) {
+	public Boolean deleteHackathonById(Long id) {
 		this.verifyIsHackathonExists(id);
 		this.hackathonRepository.deleteById(id);
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return true;
 	}
 
 	@Override
-	public ResponseEntity<Page<Team>> getListAllTeams(Long idHackathon, Pageable pageable) {
+	public Page<Team> getListAllTeams(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsByIdOfHackathon(idHackathon, pageable), HttpStatus.OK);
+		return this.teamRepository.getListAllTeamsByIdOfHackathon(idHackathon, pageable);
 	}
 
 	@Override
-	public ResponseEntity<Page<Team>> getListAllTeamsOrderByName(Long idHackathon, Pageable pageable) {
+	public Page<Team> getListAllTeamsOrderByName(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsOrderByName(idHackathon, pageable), HttpStatus.OK);
+		return this.teamRepository.getListAllTeamsOrderByName(idHackathon, pageable);
 	}
 	
 	@Override
-	public ResponseEntity<Page<Team>> getListAllTeamsOrderByRegistrationDate(Long idHackathon, Pageable pageable) {
+	public Page<Team> getListAllTeamsOrderByRegistrationDate(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return new ResponseEntity<Page<Team>>(this.teamRepository.getListAllTeamsOrderByRegistrationDate(idHackathon, pageable), HttpStatus.OK);
+		return this.teamRepository.getListAllTeamsOrderByRegistrationDate(idHackathon, pageable);
 	}
 
 	@Override
-	public ResponseEntity<Boolean> endSubscriptions(Long id) {
+	public Boolean endSubscriptions(Long id) {
 		this.verifyIsHackathonExists(id);
 		Hackathon hackathon = this.hackathonRepository.findById(id).get();
 		hackathon.setStatus(HackathonStatus.CLOSED);
-		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return true;
 	}
 	
 	private void verifyIsHackathonExists(Long id) {
