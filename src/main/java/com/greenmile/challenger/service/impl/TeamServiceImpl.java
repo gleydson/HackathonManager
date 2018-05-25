@@ -111,9 +111,7 @@ public class TeamServiceImpl implements TeamService {
 	
 	private List<Member> getMembersListOfDataBase(Team team) {
 		List<Member> members = new ArrayList<>();
-		for (Member member : team.getMembers()) {
-			members.add(this.memberRepository.findByEmail(member.getEmail()));
-		}
+		team.getMembers().forEach(member -> members.add(this.memberRepository.findByEmail(member.getEmail())));
 		return members;
 	}
 	

@@ -81,16 +81,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-core</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
 	</dependencies>
 	
 	<repositories>

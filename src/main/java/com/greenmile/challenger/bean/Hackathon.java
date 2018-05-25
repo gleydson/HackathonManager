@@ -27,7 +27,7 @@ import lombok.Data;
 public class Hackathon {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long idHackathon;
 	
 	@NotEmpty
 	private String name;

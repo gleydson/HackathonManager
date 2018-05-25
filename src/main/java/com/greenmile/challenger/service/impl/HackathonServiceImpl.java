@@ -45,7 +45,7 @@ public class HackathonServiceImpl implements HackathonService {
 
 	@Override
 	public Hackathon updateHackathon(Hackathon hackathon) {
-		this.verifyIsHackathonExists(hackathon.getId());
+		this.verifyIsHackathonExists(hackathon.getIdHackathon());
 		return this.hackathonRepository.save(hackathon);
 	}
 
@@ -59,19 +59,19 @@ public class HackathonServiceImpl implements HackathonService {
 	@Override
 	public Page<Team> getListAllTeams(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return this.teamRepository.getListAllTeamsByIdOfHackathon(idHackathon, pageable);
+		return this.teamRepository.findFirst10ByIdHackathon(idHackathon, pageable);
 	}
 
 	@Override
 	public Page<Team> getListAllTeamsOrderByName(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return this.teamRepository.getListAllTeamsOrderByName(idHackathon, pageable);
+		return this.teamRepository.findFirst10ByIdHackathonOrderByName(idHackathon, pageable);
 	}
 	
 	@Override
 	public Page<Team> getListAllTeamsOrderByRegistrationDate(Long idHackathon, Pageable pageable) {
 		this.verifyIsHackathonExists(idHackathon);
-		return this.teamRepository.getListAllTeamsOrderByRegistrationDate(idHackathon, pageable);
+		return this.teamRepository.findFirst10ByIdHackathonOrderByRegistrationDate(idHackathon, pageable);
 	}
 
 	@Override
